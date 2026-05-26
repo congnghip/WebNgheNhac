@@ -1,0 +1,190 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Create Account";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Record</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface);
+            font-family: var(--font-family);
+        }
+        .auth-container {
+            width: min(400px, 90vw);
+            padding: 48px 40px;
+        }
+        .auth-brand {
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            color: var(--primary);
+            margin-bottom: 40px;
+        }
+        .auth-title {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin: 0 0 8px;
+            color: var(--primary);
+        }
+        .auth-subtitle {
+            margin: 0 0 32px;
+            color: var(--secondary);
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .auth-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .auth-field label {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            color: var(--on-surface);
+        }
+        .auth-field input {
+            width: 100%;
+            height: 48px;
+            padding: 0 20px;
+            border: 1px solid var(--outline-variant);
+            border-radius: var(--radius-full);
+            background: var(--surface-container-low);
+            color: var(--on-surface);
+            outline: none;
+            font-size: 16px;
+            font-weight: 400;
+            transition: border-color 200ms, background 200ms;
+        }
+        .auth-field input:focus {
+            border-color: var(--primary);
+            background: var(--surface-container-lowest);
+        }
+        .auth-field .field-validation-error {
+            color: var(--error);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .auth-error {
+            padding: 12px 16px;
+            border-radius: var(--radius-full);
+            background: var(--error-container);
+            color: var(--on-error-container);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .auth-submit {
+            width: 100%;
+            height: 52px;
+            border-radius: var(--radius-full);
+            background: var(--primary);
+            color: var(--on-primary);
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: transform 200ms;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .auth-submit:hover { transform: scale(1.02); }
+        .auth-submit:active { transform: scale(0.98); }
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        .auth-footer a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-brand">Record</div>
+    <h1 class="auth-title">Create account</h1>
+    <p class="auth-subtitle">Join the collection.</p>
+
+    <form asp-action="Register" method="post" class="auth-form">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="auth-error">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
+
+        <div class="auth-field">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" type="email" placeholder="email@example.com" autocomplete="email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div class="auth-field">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" type="password" placeholder="••••••••" autocomplete="new-password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="auth-field">
+            <label asp-for="ConfirmPassword">Confirm password</label>
+            <input asp-for="ConfirmPassword" type="password" placeholder="••••••••" autocomplete="new-password" />
+            <span asp-validation-for="ConfirmPassword"></span>
+        </div>
+
+        <div class="auth-field" style="flex-direction:row;align-items:center;gap:12px;">
+            <input asp-for="IsArtist" type="checkbox" style="width:20px;height:20px;margin:0;accent-color:var(--primary);" />
+            <label asp-for="IsArtist" style="cursor:pointer;font-size:15px;margin:0;">
+                Register as artist <span style="color:var(--secondary);font-weight:400;">(requires admin approval)</span>
+            </label>
+        </div>
+
+        <button type="submit" class="auth-submit">
+            Create account
+            <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+        </button>
+    </form>
+
+    <div class="auth-footer">
+        Already have an account? <a asp-controller="Account" asp-action="Login">Sign in</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.1.0/dist/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
